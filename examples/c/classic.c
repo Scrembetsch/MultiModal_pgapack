@@ -7,6 +7,7 @@
  *     4.  Ackley
  */
 #include <pgapack.h>
+#include <time.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265354
@@ -40,6 +41,8 @@ int main( int argc, char **argv ) {
     int n;
     double l[maxN], u[maxN]; /* for initializing lu ranges */
     int i;
+
+    clock_t start = clock();
 
     MPI_Init(&argc, &argv);
 
@@ -87,6 +90,10 @@ int main( int argc, char **argv ) {
     PGADestroy(ctx);
     
     MPI_Finalize();
+
+    clock_t difference = clock() - start;
+    int msec = difference * 1000 / CLOCKS_PER_SEC;
+    printf("Time taken %ds:%dms\n", msec / 1000, msec % 1000);
     return 0;
 }
 
