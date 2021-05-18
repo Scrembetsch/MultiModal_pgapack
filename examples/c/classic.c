@@ -27,9 +27,12 @@ double Upper[4]      = { 511.0, 5.11, 511.0, 32.767};
 
 const int maxN = 100;
 
-int ackleyA = 100;
-double ackleyB = 0.3;
-double ackleyC = 1.85 * M_PI;
+int ackleyA = 70;
+double ackleyB = 0.2;
+double ackleyC = 1.0 * M_PI;
+
+const int mode = 0;
+const int modeIterations = 10000;
 
 /*******************************************************************
  *                   user main program                              *
@@ -46,25 +49,54 @@ int main( int argc, char **argv ) {
 
     MPI_Init(&argc, &argv);
 
-    // testnum = GetIntegerParameter("Which test? (1-Griewank, 2-Rastrigin, 3-Schwefel, 4-Ackley)\n") - 1;
-    // maxiter = GetIntegerParameter("How many iterations?\n");
+    switch(mode)
+    {
+        case 0:
+            testnum = 3;
+            maxiter = modeIterations;
+            n = 20;
+            ackleyA = 70;
+            ackleyB = 0.2;
+            ackleyC = 1.0 * M_PI;
+            break;
 
-    testnum = 3;
-    maxiter = 100000;
+        case 1:
+            testnum = 3;
+            maxiter = modeIterations;
+            n = 40;
+            ackleyA = 100;
+            ackleyB = 0.3;
+            ackleyC = 1.85 * M_PI;
+            break;
 
-    n = NumCoords[testnum];
+        case 2:
+            testnum = 3;
+            maxiter = modeIterations;
+            n = 80;
+            ackleyA = 250;
+            ackleyB = 0.25;
+            ackleyC = 1.9 * M_PI;
+            break;
 
-    // if(testnum == 3)
-    // {
-    //     int overrideParams = GetIntegerParameter("Want to override parameters(0 - false, 1 - true)?\nDefault Parameters are (n = 20, a = 70, b = 0.2, c = 1.0 * PI)\n");
-    //     if(overrideParams == 1)
-    //     {
-    //         n = GetIntegerParameter("N (5-100)\n");
-    //         ackleyA = GetIntegerParameter("A(int)\n");
-    //         ackleyB = ((double)GetIntegerParameter("B / 100\n")) / 100.0;
-    //         ackleyC = ((double)GetIntegerParameter("C / 100 * PI\n")) / 100.0 * M_PI;
-    //     }
-    // }
+        default:
+            testnum = GetIntegerParameter("Which test? (1-Griewank, 2-Rastrigin, 3-Schwefel, 4-Ackley)\n") - 1;
+            maxiter = GetIntegerParameter("How many iterations?\n");
+
+            n = NumCoords[testnum];
+
+            if(testnum == 3)
+            {
+                int overrideParams = GetIntegerParameter("Want to override parameters(0 - false, 1 - true)?\nDefault Parameters are (n = 20, a = 70, b = 0.2, c = 1.0 * PI)\n");
+                if(overrideParams == 1)
+                {
+                    n = GetIntegerParameter("N (5-100)\n");
+                    ackleyA = GetIntegerParameter("A(int)\n");
+                    ackleyB = ((double)GetIntegerParameter("B / 100\n")) / 100.0;
+                    ackleyC = ((double)GetIntegerParameter("C / 100 * PI\n")) / 100.0 * M_PI;
+                }
+            }
+            break;
+    }
 
     for (i = 0; i < n; i++)
     {
